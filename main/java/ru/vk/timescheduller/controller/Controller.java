@@ -59,7 +59,7 @@ public class Controller {
 
     private void printLine01CurrentTime() {
         Timer timer = new Timer();
-        timer.schedule(new Line01_CurrentTime(COLOR.YELLOW), 0, 100);
+        timer.schedule(new Line01_CurrentTime(COLOR.YELLOW), 0, 1000);
     }
 
 

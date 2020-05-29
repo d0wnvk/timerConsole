@@ -65,10 +65,13 @@ public class Line01_CurrentTime extends TimerTask {
 
         secondsLine = colorrr + secondsLine ;
 
-    }
 
-    private void processor(String formatDateTime, int realSecond) {
-        // секунды
+
+        int realSecond = now.getSecond();
+        if (realSecond != tempRealSecond) {
+            // выполни  все это тк следующая секунда наступила
+        }
+
         seconds60++;
         seconds60(); // каждую секунду строка реконструируется
 
@@ -76,6 +79,12 @@ public class Line01_CurrentTime extends TimerTask {
             seconds60 = 0; // у этого счетчика жизненный цикл рестартует каждые 60сек
             minutes60++;
         }
+
+    }
+
+    private void processor(String formatDateTime, int realSecond) {
+        // секунды
+
 
 
         // минуты
