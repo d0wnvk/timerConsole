@@ -12,11 +12,11 @@ public class PrintProcessor {
             blankLine.append(" ");
         }
 
-        System.out.print(                       // 01 line
+        System.out.print(                                            // 01 line
                 blankLine
                         + "\n");
 
-        System.out.print(                       // 02 line
+        System.out.print(                                           // 02 line
                 "\u001B[90m"
                         + " 02 line clock   :          "
                         + currentTime
@@ -28,20 +28,22 @@ public class PrintProcessor {
                         + "\n"); // 01 line
         System.out.print(
                 ANSI_PURPLE
-                        + " 03 line 60 secs :    " // 03 line
+                        + " 03 line 60 secs :    "                  // 03 line
+                        + secondsToPrint
+                        + "   "
                         + secondsLine
                         + ANSI_RESET
                         + "\n");
         System.out.print(
                 ANSI_GREEN
-                        + " 04 line 60 mins :    " // line 04
+                        + " 04 line 60 mins :    "                   // line 04
                         + minutesLine
                         + ANSI_RESET
                         + "\n"  // в последней строке нет переноса
         );
         System.out.print(
                 ANSI_CYAN
-                        + " 05 line 60 hours :"                         // line 05
+                        + " 05 line 60 hours :"                       // line 05
                         + hoursLine
                         + " independent count : "
                         + independentCount + "   "

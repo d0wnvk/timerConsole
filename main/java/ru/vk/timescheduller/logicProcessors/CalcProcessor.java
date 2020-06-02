@@ -11,10 +11,10 @@ public class CalcProcessor extends TimerTask {
     private final PrintProcessor printProcessor;
     private LocalDateTime localDateTimeStarted;
     private LocalDateTime localDateTimeNow;
-    private int seconds60 = 0;
+    private int seconds60ForCount = 0;
     private int minutes60 = 0;
     private int hours03 = 0;
-    protected static String secondsLine;
+    protected static StringBuilder secondsLine;
     protected static String minutesLine;
     protected static String hoursLine;
     protected static String ANSI_RAINBOW_COLORS;
@@ -29,12 +29,14 @@ public class CalcProcessor extends TimerTask {
     private int currentSeconds;
     private String passedTime;
     private long secondsDelta;
+    protected static StringBuilder secondsToPrint;
 
 
     public CalcProcessor(LocalDateTime localDateTimeNow) {
         this.localDateTimeStarted = localDateTimeNow;
         this.secondsFromStart = 0;
         this.printProcessor = new PrintProcessor();
+        secondsToPrint = new StringBuilder();
     }
 
     @Override
@@ -95,48 +97,56 @@ public class CalcProcessor extends TimerTask {
         // todo print secondLine 10 times per 1 sec
 
         secondsConstants(); // one time per sec
+        makeSecondsPrintable();
 
+    }
+
+    private void makeSecondsPrintable() {
+        secondsToPrint.setLength(0);
+        if (seconds60ForCount < 10) {
+            secondsToPrint.append("0" + seconds60ForCount);
+        } else {
+            secondsToPrint.append(seconds60ForCount);
+        }
     }
 
     private void secondsLineConstructor() {
         // 10 times per second
-        StringBuilder seconds = new StringBuilder();
-
-        if (seconds60 < 10) {
-            seconds.append("0" + seconds60);
-        } else {
-            seconds.append(seconds60);
-        }
 
 
-        // цвет отсчитанных секунд минус один
+        secondsLine = new StringBuilder();
+        // draw already counted seconds - its yellow
         int a;
-        for (a = 0; a < seconds60; a++) {
-            if ((a % 10) == 0) {
-                seconds.append(" ");
+        for (a = 1; a < seconds60ForCount; a++) {
+            // 1 -> zero is bypassed cause I want the very first second to be in rainbow colors
+            if ((a % 10) == 0) {    // разбивка 60 сек на 6 групп по 10
+                secondsLine.append(" "); // каждые 10 сек добавляшка пробел между группами
             }
-            seconds.append(ANSI_YELLOW);
-            seconds.append("#");
+            secondsLine.append(ANSI_YELLOW);
+            secondsLine.append("#");
         }
+
+        // draw cursor in rainbow colors, cursor is going with the seconds
+        secondsLine.append(ANSI_RAINBOW_COLORS);
+        secondsLine.append("#");
 
         // цвет оставшихся (неотсчитанных) секунд
         for (int i = a; i < 60; i++) {
             if ((i % 10) == 0) {
-                seconds.append(" ");
+                secondsLine.append(" ");
             }
-            seconds.append(ANSI_RED);
-            seconds.append("#");
+            secondsLine.append(ANSI_RED);
+            secondsLine.append("#");
         }
 
-        secondsLine = seconds.toString();
 
     }
 
     private void secondsConstants() {
 
-        seconds60++;
-        if (seconds60 > 59) {
-            seconds60 = 0; // у этого счетчика жизненный цикл рестартует каждые 60сек
+        seconds60ForCount++;
+        if (seconds60ForCount > 59) {
+            seconds60ForCount = 0; // у этого счетчика жизненный цикл рестартует каждые 60сек
             minutes60++;
         }
 
