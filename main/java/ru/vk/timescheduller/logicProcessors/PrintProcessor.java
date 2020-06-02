@@ -27,11 +27,11 @@ public class PrintProcessor {
                         + blankLine
                         + "\n"); // 01 line
         System.out.print(
-                ANSI_PURPLE
+                ANSI_CYAN
                         + " 03 line 60 secs :    "                  // 03 line
                         + secondsToPrint
-                        + "   "
-                        + secondsLine
+                        + "    "
+                        + secondsGraphicLine
                         + ANSI_RESET
                         + "\n");
         System.out.print(
@@ -42,12 +42,14 @@ public class PrintProcessor {
                         + "\n"  // в последней строке нет переноса
         );
         System.out.print(
-                ANSI_CYAN
-                        + " 05 line 60 hours :"                       // line 05
+                ANSI_BLUE
+                        + " 05 line 60 hours: "                       // line 05
                         + hoursLine
-                        + " independent count : "
+                        + " independent count"
+                        + ANSI_RAINBOW_COLORS
+                        + " : "
+                        + ANSI_BLUE
                         + independentCount + "   "
-                        + ANSI_RAINBOW_COLORS + "!"
                         + ANSI_RESET
                 // + "\n" в последней строке нет переноса
         );

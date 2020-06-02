@@ -12,9 +12,9 @@ public class CalcProcessor extends TimerTask {
     private LocalDateTime localDateTimeStarted;
     private LocalDateTime localDateTimeNow;
     private int seconds60ForCount = 0;
-    private int minutes60 = 0;
+    private int minutes60ForCount = 0;
     private int hours03 = 0;
-    protected static StringBuilder secondsLine;
+    protected static StringBuilder secondsGraphicLine;
     protected static String minutesLine;
     protected static String hoursLine;
     protected static String ANSI_RAINBOW_COLORS;
@@ -114,29 +114,31 @@ public class CalcProcessor extends TimerTask {
         // 10 times per second
 
 
-        secondsLine = new StringBuilder();
+        secondsGraphicLine = new StringBuilder();
         // draw already counted seconds - its yellow
         int a;
-        for (a = 1; a < seconds60ForCount; a++) {
+        for (a = 1; a < seconds60ForCount ; a++) {
             // 1 -> zero is bypassed cause I want the very first second to be in rainbow colors
-            if ((a % 10) == 0) {    // разбивка 60 сек на 6 групп по 10
-                secondsLine.append(" "); // каждые 10 сек добавляшка пробел между группами
+            secondsGraphicLine.append(ANSI_YELLOW);
+            secondsGraphicLine.append("!");
+            if ((a % 10 == 0)) {    // разбивка 60 сек на 6 групп по 10
+                secondsGraphicLine.append(" "); // каждые 10 сек добавляшка пробел между группами
             }
-            secondsLine.append(ANSI_YELLOW);
-            secondsLine.append("#");
         }
 
         // draw cursor in rainbow colors, cursor is going with the seconds
-        secondsLine.append(ANSI_RAINBOW_COLORS);
-        secondsLine.append("#");
+        int random = new Random().nextInt(126-33);
+        secondsGraphicLine.append(ANSI_RAINBOW_COLORS);
+//        secondsLine.append((char) (33 + random)); // 33-126 is visible ascii symbols
+        secondsGraphicLine.append("!");
 
         // цвет оставшихся (неотсчитанных) секунд
-        for (int i = a; i < 60; i++) {
-            if ((i % 10) == 0) {
-                secondsLine.append(" ");
+        for (int i = a + 1; i <= 60; i++) {
+            secondsGraphicLine.append(ANSI_RED);
+            secondsGraphicLine.append("#");
+            if ((i % 10 ) == 0) {
+                secondsGraphicLine.append(" ");
             }
-            secondsLine.append(ANSI_RED);
-            secondsLine.append("#");
         }
 
 
@@ -147,25 +149,29 @@ public class CalcProcessor extends TimerTask {
         seconds60ForCount++;
         if (seconds60ForCount > 59) {
             seconds60ForCount = 0; // у этого счетчика жизненный цикл рестартует каждые 60сек
-            minutes60++;
+            minutes60ForCount++;
         }
 
     }
 
     private void minutesLine() {
-        if (minutes60 > 59) {
-            minutes60 = 0; // у этого счетчика жизненный цикл рестартует каждый час
+        if (minutes60ForCount > 59) {
+            minutes60ForCount = 0; // у этого счетчика жизненный цикл рестартует каждый час
             hours03++;
         }
         StringBuilder minutes = new StringBuilder();
 
-        minutes = minutes60 < 10 ? minutes.append("0" + minutes60) : minutes.append(minutes60);
-        minutes.append(" : ");
+        if (minutes60ForCount < 10) {
+            minutes.append("0" + minutes60ForCount);
+        } else {
+            minutes.append(minutes60ForCount);
+        }
+        minutes.append("   ");
 
         String colorrr = ANSI_WHITE;
 
         int a;
-        for (a = 0; a < minutes60; a++) {
+        for (a = 0; a < minutes60ForCount; a++) {
             if ((a % 10) == 0) {
                 minutes.append(" ");
             }
@@ -178,7 +184,7 @@ public class CalcProcessor extends TimerTask {
                 colorrr = ANSI_RED;
 
             minutes.append(colorrr);
-            minutes.append("#");
+            minutes.append(">");
         }
 
 
@@ -190,7 +196,7 @@ public class CalcProcessor extends TimerTask {
 //            int m = 90; // white pale
             int m = 2; // even more  white pale
 
-            if (minutes60 > 40 && i >= 40) {
+            if (minutes60ForCount > 40 && i >= 40) {
                 minutes.append(
                         "\u001B[5m" +   // blinking color
                                 "\u001B[" + m + "m"
@@ -218,10 +224,12 @@ public class CalcProcessor extends TimerTask {
         int a;
 
         if (hours03 < 10) {
-            sb.append(" : 0" + hours03 + " : ");
+            sb.append("   0" + hours03);
         } else {
-            sb.append(" : " + hours03 + " : ");
+            sb.append("   " + hours03 );
         }
+
+        sb.append("   ");
 
 
         for (a = 0; a < hours03; a++) {
@@ -237,7 +245,6 @@ public class CalcProcessor extends TimerTask {
             if ((i % 10) == 0) {
                 sb.append(" ");
             }
-            sb.append(ANSI_RED);
             sb.append("#");
         }
 
