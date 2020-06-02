@@ -93,11 +93,8 @@ public class CalcProcessor extends TimerTask {
     }
 
     private void secondsLine() {
-        // todo seconds params - 1 time per 1 sec
-        // todo print secondLine 10 times per 1 sec
-
         secondsConstants(); // one time per sec
-        makeSecondsPrintable();
+        makeSecondsPrintable();// one time per sec
 
     }
 
@@ -117,7 +114,7 @@ public class CalcProcessor extends TimerTask {
         secondsGraphicLine = new StringBuilder();
         // draw already counted seconds - its yellow
         int a;
-        for (a = 1; a < seconds60ForCount ; a++) {
+        for (a = 1; a < seconds60ForCount; a++) {
             // 1 -> zero is bypassed cause I want the very first second to be in rainbow colors
             secondsGraphicLine.append(ANSI_YELLOW);
             secondsGraphicLine.append("!");
@@ -127,7 +124,7 @@ public class CalcProcessor extends TimerTask {
         }
 
         // draw cursor in rainbow colors, cursor is going with the seconds
-        int random = new Random().nextInt(126-33);
+        int random = new Random().nextInt(126 - 33);
         secondsGraphicLine.append(ANSI_RAINBOW_COLORS);
 //        secondsLine.append((char) (33 + random)); // 33-126 is visible ascii symbols
         secondsGraphicLine.append("!");
@@ -136,22 +133,19 @@ public class CalcProcessor extends TimerTask {
         for (int i = a + 1; i <= 60; i++) {
             secondsGraphicLine.append(ANSI_RED);
             secondsGraphicLine.append("#");
-            if ((i % 10 ) == 0) {
+            if ((i % 10) == 0) {
                 secondsGraphicLine.append(" ");
             }
         }
-
-
     }
 
     private void secondsConstants() {
-
+        // one time per sec
         seconds60ForCount++;
         if (seconds60ForCount > 59) {
             seconds60ForCount = 0; // у этого счетчика жизненный цикл рестартует каждые 60сек
             minutes60ForCount++;
         }
-
     }
 
     private void minutesLine() {
@@ -226,7 +220,7 @@ public class CalcProcessor extends TimerTask {
         if (hours03 < 10) {
             sb.append("   0" + hours03);
         } else {
-            sb.append("   " + hours03 );
+            sb.append("   " + hours03);
         }
 
         sb.append("   ");
