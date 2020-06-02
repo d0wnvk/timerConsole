@@ -1,9 +1,8 @@
 package ru.vk.timescheduller.controller;
 
-import ru.vk.timescheduller.lines.Line01_CurrentTime;
-import ru.vk.timescheduller.constants.COLOR;
-import ru.vk.timescheduller.lines.Line02_30min;
+import ru.vk.timescheduller.lines.CalcProcessor;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.stream.Collectors;
@@ -52,14 +51,13 @@ public class Controller {
 
     public void start() {
         printExampleColors();
-        printLine01CurrentTime();
-//        printLine02();
+        runCalcProcessor();
 
     }
 
-    private void printLine01CurrentTime() {
+    private void runCalcProcessor() {
         Timer timer = new Timer();
-        timer.schedule(new Line01_CurrentTime(COLOR.YELLOW), 0, 1000);
+        timer.schedule(new CalcProcessor(LocalDateTime.now()),0, 100);
     }
 
 
