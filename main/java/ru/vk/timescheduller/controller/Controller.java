@@ -1,6 +1,6 @@
 package ru.vk.timescheduller.controller;
 
-import ru.vk.timescheduller.lines.CalcProcessor;
+import ru.vk.timescheduller.logicProcessors.CalcProcessor;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -21,7 +21,7 @@ public class Controller {
 
     public Controller(String[] args) {
         this.args = args;
-        String collect = Arrays.asList(args).stream().collect(Collectors.joining(" "));
+        String collect = String.join(" ", args);
         System.out.println(ANSI_CYAN + "Arguments are : " + collect + ANSI_RESET);
     }
 

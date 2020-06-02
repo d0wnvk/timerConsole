@@ -1,4 +1,4 @@
-package ru.vk.timescheduller.lines;
+package ru.vk.timescheduller.logicProcessors;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -99,9 +99,15 @@ public class CalcProcessor extends TimerTask {
     }
 
     private void secondsLineConstructor() {
+        // 10 times per second
         StringBuilder seconds = new StringBuilder();
-        seconds = seconds60 < 10 ? seconds.append("0" + seconds60) : seconds.append(seconds60);
-        seconds.append(" : ");
+
+        if (seconds60 < 10) {
+            seconds.append("0" + seconds60);
+        } else {
+            seconds.append(seconds60);
+        }
+
 
         // цвет отсчитанных секунд минус один
         int a;

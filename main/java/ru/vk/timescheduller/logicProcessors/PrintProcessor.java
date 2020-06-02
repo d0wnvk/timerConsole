@@ -1,8 +1,8 @@
-package ru.vk.timescheduller.lines;
+package ru.vk.timescheduller.logicProcessors;
 
 import static ru.vk.timescheduller.controller.Controller.*;
 import static ru.vk.timescheduller.controller.Controller.ANSI_RESET;
-import static ru.vk.timescheduller.lines.CalcProcessor.*;
+import static ru.vk.timescheduller.logicProcessors.CalcProcessor.*;
 
 public class PrintProcessor {
     public void printResults() {
