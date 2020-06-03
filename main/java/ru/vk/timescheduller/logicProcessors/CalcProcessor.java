@@ -22,7 +22,6 @@ public class CalcProcessor extends TimerTask {
     private int tempRealSecond;
     protected static int independentCount = 0;
     protected static String currentTime;
-//    private long secondsFromStart;
 
     private int colorCode;
     private long hoursDelta;
@@ -33,7 +32,6 @@ public class CalcProcessor extends TimerTask {
     protected static StringBuilder secondsToPrint;
     protected static StringBuilder minutesToPrint;
     protected static long secondsAbsFromStart;
-
 
     public CalcProcessor(LocalDateTime localDateTimeNow) {
         this.localDateTimeStarted = localDateTimeNow;
