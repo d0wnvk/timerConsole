@@ -8,9 +8,7 @@ public class PrintProcessor {
     public void printResults() {
 
         StringBuilder blankLine = new StringBuilder();
-        for (int i = 0; i < 100; i++) {
-            blankLine.append(" ");
-        }
+        blankLine.append(" ".repeat(100));
 
         System.out.print(                                            // 01 line
                 blankLine
@@ -37,7 +35,9 @@ public class PrintProcessor {
         System.out.print(
                 ANSI_GREEN
                         + " 04 line 60 mins :    "                   // line 04
-                        + minutesLine
+                        + minutesToPrint
+                        + " : " + secondsAbsFromStart + " : "
+                        + minutesGraphicLine
                         + ANSI_RESET
                         + "\n"  // в последней строке нет переноса
         );
