@@ -15,7 +15,7 @@ public class PrintProcessor {
                         + "\n");
 
         System.out.print(                                           // 02 line
-                "\u001B[90m"
+                "\u001B[90m"  // pale white
                         + " 02 line clock   :          "
                         + currentTime
                         + " <---> "
@@ -34,22 +34,24 @@ public class PrintProcessor {
                         + "\n");
         System.out.print(
                 ANSI_GREEN
-                        + " 04 line 60 mins :    "                   // line 04
-                        + minutesToPrint
-                        + " : " + secondsAbsFromStart + " : "
-                        + minutesGraphicLine
+                        + " 04 line 60 mins :"                   // line 04
+                        + "    " + minutesToPrint
+                        + "   " + minutesGraphicLine
                         + ANSI_RESET
                         + "\n"  // в последней строке нет переноса
         );
         System.out.print(
-                ANSI_BLUE
+                "\u001B[94m"        // pale purple
                         + " 05 line 60 hours: "                       // line 05
                         + hoursLine
                         + " independent count"
                         + ANSI_RAINBOW_COLORS
                         + " : "
-                        + ANSI_BLUE
-                        + independentCount + "   "
+                        + "\u001B[94m"        // pale purple
+                        + independentCount
+                        + "\u001B[44m"        // pale white
+                        + "\u001B[90m"        // background is blue
+                        + ", abs seconds: " + secondsAbsFromStart // pale white
                         + ANSI_RESET
                 // + "\n" в последней строке нет переноса
         );

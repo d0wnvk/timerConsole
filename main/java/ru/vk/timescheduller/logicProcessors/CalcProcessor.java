@@ -32,6 +32,7 @@ public class CalcProcessor extends TimerTask {
     protected static StringBuilder secondsToPrint;
     protected static StringBuilder minutesToPrint;
     protected static long secondsAbsFromStart;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public CalcProcessor(LocalDateTime localDateTimeNow) {
         this.localDateTimeStarted = localDateTimeNow;
@@ -45,23 +46,21 @@ public class CalcProcessor extends TimerTask {
         // runs 10 times per 1 sec
         independentCount++;
         secondsAbsFromStart = ChronoUnit.SECONDS.between(localDateTimeStarted, LocalDateTime.now());
-        makeSecondsPrintable();// 10 time per sec
-
         seconds60ForCount = secondsAbsFromStart % 60;
 
         localDateTimeNow = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         currentTime = localDateTimeNow.format(formatter);
 
         // выполни все это тк следующая секунда наступила
         currentSeconds = localDateTimeNow.getSecond();
         if (currentSeconds != tempRealSecond) {  // блок 1 раз в 1 секунду
-            oneTimeInASecondProcessor();
+            oneTimePerSecondProcessor();
         }
         tempRealSecond = currentSeconds;
 
+        makeSecondsPrintable();// 10 time per sec
 
-        ansiRainbowColors();   // 10 раз в секунду
+        ansiRainbowColorsForeground();   // 10 раз в секунду
 
         secondsLineConstructor(); // 10 times per second
 
@@ -69,49 +68,24 @@ public class CalcProcessor extends TimerTask {
 
     }
 
-    private void oneTimeInASecondProcessor() {
-        passedTimeCalc();
-
+    private void oneTimePerSecondProcessor() {
         minutes60ForCount = secondsAbsFromStart / 60;
 
-        minutesLineBuiler();
-        hoursLineBuilder();
-    }
-
-    private void ansiRainbowColors() {
-        // 10 раз в секунду
-        // раскраска курсора
-        int random = new Random().nextInt(8);
-        colorCode = 90 + random;
-        ANSI_RAINBOW_COLORS = "\u001B[" + colorCode + "m";
-    }
-
-    private void passedTimeCalc() {
-        // 1 раз в секунду
-        secondsDelta = secondsAbsFromStart % 60;
-        minutesDelta = (secondsAbsFromStart / 60) % 60;
-        hoursDelta = (secondsAbsFromStart / 60 / 60) % 60;
-
-        passedTime = (hoursDelta < 10 ? "0" + hoursDelta : hoursDelta)
-                + ":" + (minutesDelta < 10 ? "0" + minutesDelta : minutesDelta)
-                + ":" + (secondsDelta < 10 ? "0" + secondsDelta : secondsDelta);
-    }
-
-
-    private void makeSecondsPrintable() {
-        secondsToPrint.setLength(0);
-        long currentSeconds = secondsAbsFromStart % 60;
-        if ((secondsAbsFromStart % 60) < 10) {
-            secondsToPrint.append("0").append(currentSeconds);
-        } else {
-            secondsToPrint.append(currentSeconds);
+        if (minutes60ForCount > 59) {
+            minutes60ForCount = 0; // у этого счетчика жизненный цикл рестартует каждый час
+            hours03++;
         }
+
+        minutesLineConstructor();
+
+        hoursLineConstructor();
+
+        passedTimeCalculation();
     }
+
 
     private void secondsLineConstructor() {
         // 10 times per second
-
-
         secondsGraphicLine = new StringBuilder();
         // draw already counted seconds - its yellow
         int a;
@@ -140,20 +114,11 @@ public class CalcProcessor extends TimerTask {
         }
     }
 
-    private void minutesLineBuiler() {
-        if (minutes60ForCount > 59) {
-            minutes60ForCount = 0; // у этого счетчика жизненный цикл рестартует каждый час
-            hours03++;
-        }
-
+    private void minutesLineConstructor() {
+        // one time per second
         minutesToPrint = new StringBuilder();
 
-        if (minutes60ForCount < 10) {
-            minutesToPrint.append("0").append(minutes60ForCount);
-        } else {
-            minutesToPrint.append(minutes60ForCount);
-        }
-        minutesToPrint.append("   ");
+        makeMinutesPrintable();
 
         String colorrr;
 
@@ -189,7 +154,7 @@ public class CalcProcessor extends TimerTask {
                         "\u001B[")
                         .append(m)
                         .append("m");
-                minutesGraphicLine.append("#");
+                minutesGraphicLine.append("<");
             } else {
                 minutesGraphicLine.append("\u001B[")
                         .append(m)
@@ -199,7 +164,7 @@ public class CalcProcessor extends TimerTask {
         }
     }
 
-    private void hoursLineBuilder() {
+    private void hoursLineConstructor() {
         // 3 часа
         StringBuilder sb = new StringBuilder();
         sb.append("   0").append(hours03).append("   ");
@@ -229,4 +194,42 @@ public class CalcProcessor extends TimerTask {
 
     }
 
+    private void ansiRainbowColorsForeground() {
+        // 10 раз в секунду
+        // раскраска курсора
+        int random = new Random().nextInt(8);
+        colorCode = 90 + random;
+        ANSI_RAINBOW_COLORS = "\u001B[" + colorCode + "m";
+    }
+
+    private void passedTimeCalculation() {
+        // 1 раз в секунду
+        secondsDelta = secondsAbsFromStart % 60;
+        minutesDelta = (secondsAbsFromStart / 60) % 60;
+        hoursDelta = (secondsAbsFromStart / 60 / 60) % 60;
+
+        passedTime = (hoursDelta < 10 ? "0" + hoursDelta : hoursDelta)
+                + ":" + (minutesDelta < 10 ? "0" + minutesDelta : minutesDelta)
+                + ":" + (secondsDelta < 10 ? "0" + secondsDelta : secondsDelta);
+    }
+
+    private void makeSecondsPrintable() {
+        secondsToPrint.setLength(0);
+        long currentSeconds = secondsAbsFromStart % 60;
+        if ((secondsAbsFromStart % 60) < 10) {
+            secondsToPrint.append("0").append(currentSeconds);
+        } else {
+            secondsToPrint.append(currentSeconds);
+        }
+    }
+
+    private void makeMinutesPrintable() {
+        long minutesCurrent = secondsAbsFromStart / 60;
+        minutesToPrint.setLength(0);
+        if (minutesCurrent < 10) {
+            minutesToPrint.append("0").append(minutesCurrent);
+        } else {
+            minutesToPrint.append(minutesCurrent);
+        }
+    }
 }
